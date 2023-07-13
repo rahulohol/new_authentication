@@ -1,9 +1,11 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
+
 import Header from "./components/Header";
 import Login from "./components/Login";
-
-import { Routes, Route } from "react-router-dom";
 import Register from "./components/Register";
+import Dashboard from "./components/Dashboard";
+import Error from "./components/Error";
 
 const App = () => {
   return (
@@ -11,9 +13,10 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Login />}></Route>
-      <Route path="/register" element={<Register />}></Route>
-    </Routes>
-        
+        <Route path="/register" element={<Register />}></Route>
+        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="*" element={<Error />}></Route>
+      </Routes>
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Mix.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [passShow, setPassShow] = useState(false);
@@ -9,6 +9,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const history = useNavigate();
 
   // console.log(inpVal);
   const setVal = (e) => {
@@ -44,15 +45,16 @@ const Login = () => {
         body: JSON.stringify({ ...inpVal }),
       });
       const res = await data.json();
-      // console.log("frontend -> ", response);
-      // if (res.status === 201) {
-      //   alert("User login successfully.");
-      //   setInpVal({
-      //     ...inpVal,
-      //     email: "",
-      //     password: "",
-      //   });
-      // }
+      console.log("frontend -> ", res);
+      if (res.status === 201) {
+        localStorage.setItem("usersdatatoken", res.result.token);
+        setInpVal({
+          ...inpVal,
+          email: "",
+          password: "",
+        });
+        history("/dashboard");
+      }
     }
   };
 
