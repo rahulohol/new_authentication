@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -49,9 +49,10 @@ const userSchema = mongoose.Schema({
 // hash password;
 
 userSchema.pre("save", async function (next) {
-  this.password = await bcrypt.hash(this.password, 12);
-  this.cpassword = await bcrypt.hash(this.cpassword, 12);
-
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 12);
+    this.cpassword = await bcrypt.hash(this.cpassword, 12);
+  }
   next();
 });
 
@@ -64,7 +65,6 @@ userSchema.methods.generateAuthtoken = async function () {
     });
     this.tokens = this.tokens.concat({ token: token_jwt });
     await this.save();
-    // console.log(token_jwt);
     return token_jwt;
   } catch (err) {
     res.status(422).json(err);

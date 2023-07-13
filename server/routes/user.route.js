@@ -1,7 +1,9 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const userRouter = express.Router();
+
 const { UserModel } = require("../models/User.model");
-const bcrypt = require("bcrypt");
+const { authenticate } = require("../middleware/authenticate");
 
 //register
 
@@ -48,6 +50,9 @@ userRouter.post("/login", async (req, res) => {
 
   try {
     const validUser = await UserModel.findOne({ email: email });
+    if (!validUser) {
+      res.status(422).json({ error: "Invalid details" });
+    }
     if (validUser) {
       const passwordMatch = await bcrypt.compare(password, validUser.password);
       if (!passwordMatch) {
@@ -56,13 +61,33 @@ userRouter.post("/login", async (req, res) => {
         //token generation
         const token = await validUser.generateAuthtoken();
 
-        console.log(token);
+        // console.log(token);
+        res.cookie("usercookie", token, {
+          expires: new Date(Date.now() + 9000000),
+          httpOnly: true,
+        });
+        const result = {
+          validUser,
+          token,
+        };
+        res.status(201).json({ status: 201, result });
       }
     }
   } catch (err) {
     res.status(422).status(err);
     console.log("error while login user");
     console.log("route login ->", err);
+  }
+});
+
+//userValid
+
+userRouter.get("/validuser", authenticate, async (req, res) => {
+  try {
+    const ValidateUser = await UserModel.findOne({ _id: req.userId });
+    res.status(201).json({ status: 201, ValidateUser });
+  } catch (error) {
+    res.status(401).json({ status: 401, error });
   }
 });
 
