@@ -84,8 +84,8 @@ userRouter.post("/login", async (req, res) => {
 
 userRouter.get("/validuser", authenticate, async (req, res) => {
   try {
-    const ValidateUser = await UserModel.findOne({ _id: req.userId });
-    res.status(201).json({ status: 201, ValidateUser });
+    const finalValidUser = await UserModel.findOne({ _id: req.userId });
+    res.status(201).json({ status: 201, finalValidUser });
   } catch (error) {
     res.status(401).json({ status: 401, error });
   }
