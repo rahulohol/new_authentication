@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Mix.css";
 import { NavLink, useNavigate } from "react-router-dom";
+import { LoginContext } from "./ContextLogic/Context";
 
 const Login = () => {
   const [passShow, setPassShow] = useState(false);
+
+  const { logindata, setLoginData } = useContext(LoginContext);
 
   const [inpVal, setInpVal] = useState({
     email: "",
@@ -53,6 +56,8 @@ const Login = () => {
           email: "",
           password: "",
         });
+        // setLoginData(res);
+        console.log("res login ", res);
         history("/dashboard");
       }
     }
@@ -64,7 +69,7 @@ const Login = () => {
         <div className="form_data">
           <div className="form_heading">
             <h1>Welcome Back, Log In</h1>
-            <p>Hi, we are you glad you are back. Please login</p>
+            <p>Hi, we are glad you are back. Please login</p>
           </div>
           <form>
             <div className="form_input">

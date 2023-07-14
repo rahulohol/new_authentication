@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import userImg from "../assets/user.png";
 import { useNavigate } from "react-router-dom";
-import { LoginContext } from "./ContextProvider/Context";
+import { LoginContext } from "./ContextLogic/Context";
 
 const Dashboard = () => {
-  const { LoginData, setLoginData } = useContext(LoginContext);
+  const { logindata, setLoginData } = useContext(LoginContext);
 
-  console.log(LoginData);
+  // console.log();
 
   const history = useNavigate();
 
@@ -21,12 +21,11 @@ const Dashboard = () => {
       },
     });
     const data = await res.json();
-    console.log("res ->", data);
+    // console.log("res ->", data);
     if (data.status === 401 || !data) {
       history("*");
     } else {
       setLoginData(data);
-
       history("/dashboard");
     }
   };
@@ -45,7 +44,7 @@ const Dashboard = () => {
         }}
       >
         <img src={userImg} alt="" style={{ width: "200px", marginTop: 20 }} />
-        <h1>UserEmail:{"my mail"}</h1>
+        <h1>User Email: {logindata?.finalValidUser?.email}</h1>
       </div>
     </>
   );

@@ -2,13 +2,13 @@ import React, { createContext, useState } from "react";
 
 export const LoginContext = createContext("");
 
-const Context = ({ Children }) => {
-  const [LoginData, setLoginData] = useState("");
+const Context = ({ children }) => {
+  const [logindata, setLoginData] = useState("");
 
   return (
     <>
-      <LoginContext.Provider value={{ LoginData, setLoginData }}>
-        {Children}
+      <LoginContext.Provider value={{ logindata, setLoginData }}>
+        {children}
       </LoginContext.Provider>
     </>
   );
