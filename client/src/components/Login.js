@@ -7,6 +7,7 @@ const Login = () => {
   const [passShow, setPassShow] = useState(false);
 
   const { logindata, setLoginData } = useContext(LoginContext);
+  console.log("logindata -> ", logindata);
 
   const [inpVal, setInpVal] = useState({
     email: "",
