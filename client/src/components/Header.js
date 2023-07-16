@@ -22,6 +22,31 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const logoutUser = async () => {
+    let token = localStorage.getItem("usersdatatoken");
+
+    const res = await fetch("/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+        Accept: "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await res.json();
+
+    console.log("res ->", data);
+    if (data.status === 201) {
+      console.log("user logout");
+      localStorage.removeItem("usersdatatoken");
+      setLoginData(false);
+      history("/");
+    } else {
+      console.log("error");
+    }
+  };
+
   const goDashboard = () => {
     history("/dashboard");
   };
@@ -70,13 +95,20 @@ const Header = () => {
               <>
                 <MenuItem
                   onClick={() => {
-                    handleClose();
                     goDashboard();
+                    handleClose();
                   }}
                 >
                   Profile
                 </MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logoutUser();
+                    handleClose();
+                  }}
+                >
+                  Logout
+                </MenuItem>
               </>
             ) : (
               <>
