@@ -91,6 +91,23 @@ userRouter.get("/validuser", authenticate, async (req, res) => {
   }
 });
 
+// user logout
+
+userRouter.get("/logout", authenticate, async (req, res) => {
+  try {
+    req.rootUser.tokens = req.rootUser.tokens.filter((currentelement) => {
+      return currentelement.token !== req.token;
+    });
+
+    res.clearCookie("usercookie", { path: "/" });
+    req.rootUser.save();
+
+    res.status(201).json({ status: 201 });
+  } catch (error) {
+    res.status(201).json({ status: 401, error });
+  }
+});
+
 module.exports = {
   userRouter,
 };
